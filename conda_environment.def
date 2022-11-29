@@ -1,0 +1,30 @@
+Bootstrap: docker
+Stage: Build
+
+From: continuumio/miniconda3
+
+# List files to be send to container
+%files
+    environment.yml
+
+# Create drop environment from conda envrionment file
+%post
+    /opt/conda/bin/conda env create -f environment.yml
+
+# Arguments to run, creates the environment and bash requirements
+%runscript
+    exec /opt/conda/envs/$(head -n 1 environment.yml | cut -f 2 -d ' ')/bin/"$@"
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
+    echo "conda activate pcgr" >> $SINGULARITY_ENVIRONMENT
+
+# Author and contact info
+%labels
+    Author Rienk Heins
+    Contact r.d.heins@st.hanze.nl
+    Version v0.0.1
+
+#help message   
+%help
+    This is a build container for a sif file for the detection of RNA outliers pipeline (DROP) which can be accessed by
+    using 'singularity shell drop_test.sif'. To activate the DROP environment run 'conda activate drop_env' while in the
+    singularity container. For further instructions about the pipeline read the README found in the drop_env.
