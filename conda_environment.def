@@ -5,17 +5,18 @@ From: continuumio/miniconda3
 
 # List files to be send to container
 %files
-    environment.yml
+    drop_env.yml
 
 # Create drop environment from conda envrionment file
 %post
-    /opt/conda/bin/conda env create -f environment.yml
+    apt-get update
+    /opt/conda/bin/conda env create -f drop_env.yml
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
+    echo "conda activate drop_env" >> $SINGULARITY_ENVIRONMENT
 
 # Arguments to run, creates the environment and bash requirements
 %runscript
-    exec /opt/conda/envs/$(head -n 1 environment.yml | cut -f 2 -d ' ')/bin/"$@"
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
-    echo "conda activate pcgr" >> $SINGULARITY_ENVIRONMENT
+    exec /opt/conda/envs/$(head -n 1 drop_env.yml | cut -f 2 -d ' ')/bin/"$@"
 
 # Author and contact info
 %labels
