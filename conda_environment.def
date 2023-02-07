@@ -3,29 +3,30 @@ Stage: Build
 
 From: continuumio/miniconda3
 
-# List files to be send to container
+# drop environment file based on drop 1.2.4, for use of another drop version search the corresponding file(see README)
 %files
     drop_env.yml
 
-# Create drop environment from conda envrionment file
+# Creates the drop environment in conda and activates it
 %post
     apt-get update
     /opt/conda/bin/conda env create -f drop_env.yml
+    mkdir /groups/
+    mkdir /apps/
+    mkdir /data/
     echo ". /opt/conda/etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
     echo "conda activate drop_env" >> $SINGULARITY_ENVIRONMENT
 
-# Arguments to run, creates the environment and bash requirements
+# Argument to run the container, run default is 8 cores
 %runscript
-    exec /opt/conda/envs/$(head -n 1 drop_env.yml | cut -f 2 -d ' ')/bin/"$@"
+    snakemake --cores 8
 
 # Author and contact info
 %labels
     Author Rienk Heins
     Contact r.d.heins@st.hanze.nl
-    Version v0.0.1
+    Version v1.0.0
 
 #help message   
 %help
-    This is a build container for a sif file for the detection of RNA outliers pipeline (DROP) which can be accessed by
-    using 'singularity shell drop_test.sif'. To activate the DROP environment run 'conda activate drop_env' while in the
-    singularity container. For further instructions about the pipeline read the README found in the drop_env.
+    For help to use this container see the README on (git page), for further help on singularity see their documentation on https://apptainer.org/user-docs/master/index.html
