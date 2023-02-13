@@ -1,0 +1,94 @@
+projectTitle: #Name of the project
+root: #Path to output directory. standard: ~/../Output
+htmlOutputPath:   #Path to html output: ~/../Output/html
+indexWithFolderName: # If true, the basename of the project directory will be used as prefix for the index.html file, standard: true 
+
+sampleAnnotation: #Path to sample annotation file
+
+geneAnnotation: # Key - pair gene annotation file location, key is used for external count files to match to right gene annotation
+    #example: v42: ~/../gene_annoation_v42.gtf
+genomeAssembly: # Genomen assembly, either hg19 or hg38
+genome: # Path to reference fasta file
+
+hpoFile: # Path to hpo file, if none given online default is used
+random_seed: false # Keep false, only true for demo
+
+exportCounts:
+    # specify which gene annotations to include and which groups to exclude when exporting counts, be careful not to send sensitive data!
+    geneAnnotations:
+		# Keys to send
+    excludeGroups:
+		# Groups to send
+genome: # path to reference genome sequence in fasta format.
+    # You can define multiple reference genomes in yaml format, ncbi: path/to/ncbi, ucsc: path/to/ucsc
+    # the keywords that define the path should be in the GENOME column of the sample annotation table
+
+aberrantExpression:
+    run: true
+    groups:
+        #Groups to be used in aberrant expression
+    fpkmCutoff: 1 # fpkm filtering cutoff
+    implementation: autoencoder # Variation implementation
+	# Cutoff values:
+    padjCutoff: 0.01
+    zScoreCutoff: 2
+	# Algorithm parameters, don't have to changed.
+    maxTestedDimensionProportion: 3
+    dassie:
+        tssWindow: 500
+        pasWindow: 1000
+
+aberrantSplicing:
+    run: true
+    groups:
+        # Groups to be used in aberrant splicing
+    recount: true # recommended
+    longRead: false # Set to true only if counting Nanopore or PacBio long reads.
+    keepNonStandardChrs: false # Set to true if non standard chromosomes are to be kept for further analysis.
+    filter: true
+	# Filter settings
+    minExpressionInOneSample: 20
+    minDeltaPsi: 0.05
+	# Fraser settings and cutoffs, recommende values
+    implementation: PCA-BB-Decoder
+    padjCutoff: 0.05
+    zScoreCutoff: 2
+    deltaPsiCutoff : 0.3
+    maxTestedDimensionProportion: 6
+
+mae:
+    run: false
+    groups:
+	#groups to be used
+    gatkIgnoreHeaderCheck: true
+	# cutoff values
+    padjCutoff: .05
+    allelicRatioCutoff: 0.8
+    addAF: false
+    maxAF: .001
+    maxVarFreqCohort: .04
+    # VCF-BAM matching
+    qcVcf: # High quality vcf file
+    qcGroups:
+      # groups to use
+
+rnaVariantCalling:
+    run: false
+    groups:
+        - batch_0
+    highQualityVCFs:
+        - Data/Mills_and_1000G_gold_standard.indels.hg19.sites.chrPrefix.vcf.gz
+        - Data/1000G_phase1.snps.high_confidence.hg19.sites.chrPrefix.vcf.gz
+    dbSNP: Data/00-All.vcf.gz
+    repeat_mask: Data/hg19_repeatMasker_sorted.chrPrefix.bed
+    createSingleVCF: true
+    addAF: true
+    maxAF: .001
+    maxVarFreqCohort: .1
+    hcArgs: 
+    minAlt: 3
+
+tools:
+    gatkCmd: gatk
+    bcftoolsCmd: bcftools
+    samtoolsCmd: samtools
