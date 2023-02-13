@@ -10,7 +10,10 @@ BiocManager::install("BSgenome.Hsapiens.UCSC.hg19", update=FALSE, ask=FALSE)
 BiocManager::install("BSgenome.Hsapiens.UCSC.hg38", update=FALSE, ask=FALSE)
 q()
 R -e "BiocManager::install(c(\"gagneurlab/OUTRIDER\", \"c-mertes/FRASER\"), update=FALSE)"
-Rscript drop/drop/installRPackages.R drop/requirementsR.txt
+Rscript drop/drop/installRPackages.R drop/drop/requirementsR.txt
 # Download files from DROP were default needs to be used, here the hpo file was used, files can be found at https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/
 cd data
 wget https://www.cmm.in.tum.de/public/paper/drop_analysis/resource/hpo_genes.tsv.gz
+# when done with downloads build the container
+exit
+sudo singularity build [container name] [name]
