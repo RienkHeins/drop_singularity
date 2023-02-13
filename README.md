@@ -1,19 +1,6 @@
 # drop_singularity
 
-Attention:
-Project is still in early version, while the singularity image file can be created the drop environment isn't fully functional yet. Further updates coming.
-
-This singularity defention file is created to run the detection of RNA outliers pipeline (DROP) on high performance computing clusters. The singularity image file is based on a conda environment running drop called drop_env. Further it contains a environment.yml which contains the conda environment dependencies. 
-
-To run the file only singularity has to be installed, the container handles all the dependencies of DROP. To run the environment first build the singularity image with the build command line argument:
-
-singularity build drop.sif conda_environment.def
-
-When the image is build the environment can be accessed with the following command:
-
-singularity shell drop.sif
-
-When in the shell the drop environment can be accessed with the command conda activate drop_env.
+This repository contains a build and manual for the Detection of RNA Outlier Pipeline(DROP). To create the container install singularity on a linux system and follow the instuctions in the "Create_container.txt" file on your commandline. For further information on running the container see the run manual.
 
 For further information on installing and usage of singularity visit https://docs.sylabs.io/guides/3.5/user-guide/introduction.html.
 
